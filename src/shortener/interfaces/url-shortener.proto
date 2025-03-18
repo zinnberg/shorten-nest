@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package urlshortener;
+
+service UrlShortenerService {
+  rpc ShortenUrl (ShortenUrlRequest) returns (ShortenUrlResponse) {}
+}
+
+message ShortenUrlRequest {
+  string originalUrl = 1;
+}
+
+message ShortenUrlResponse {
+  string shortenedUrl = 1;
+} 

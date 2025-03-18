@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+out/
+*.log
+
+# Package files
+*.zip
+*.tar.gz
+*.rar
+
+# Cache and temporary files
+.cache/
+tmp/
+temp/
+*.tmp
+
+# Testing
+coverage/
+.nyc_output/
+
+
+# JavaScript/TypeScript specific
+.npm
+*.tsbuildinfo
