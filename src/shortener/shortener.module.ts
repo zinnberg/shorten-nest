@@ -22,6 +22,10 @@ import { SHORT_URL_REPO_INJECTION_TOKEN } from "./domain/short.url.repository.po
 
 import { ViewShortLinkCommandHandler } from "./application/commands/view.link.command.handler";
 
+import { CACHE_PORT_INJECTION_TOKEN } from "./application/queries/cache-port";
+
+import { RedisCacheInteface } from "./infrastructure/query/cache.inteface.implement";
+
 @Module({
     imports: [CqrsModule],
     controllers: [
@@ -33,6 +37,10 @@ import { ViewShortLinkCommandHandler } from "./application/commands/view.link.co
         ShortenUrlCommandHandler,
         ShortnerFactory,
         ViewShortLinkCommandHandler,
+        { 
+            provide: CACHE_PORT_INJECTION_TOKEN,
+            useClass: RedisCacheInteface,
+        },
         { 
             provide: SHORT_URL_GENERATION_INJECTION_TOKEN, 
             useClass: ShortUrlGeneratorNano,

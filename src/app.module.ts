@@ -14,10 +14,13 @@ import {resolve} from 'path'
 
 import { validateConfig } from './lib/config';
 
+import { RedisModule } from './lib/redis';
+
 @Module({
     imports: [
         ShortenerModule,
         DataStoreModule,
+        RedisModule,
         ConfigModule.forRoot({
             isGlobal: true,
             envFilePath: [resolve(__dirname, '..','.env')],
