@@ -22,5 +22,6 @@ export class ViewShortLinkCommandHandler implements ICommandHandler<ViewShortLin
         }
     
         shortUrl.view();
+        shortUrl.commit();
     }
 }
