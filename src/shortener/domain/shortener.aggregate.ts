@@ -1,43 +1,52 @@
 import { AggregateRoot } from "@nestjs/cqrs";
 
+import { LinkViewedEvent } from "./events/link.view.event";
+import { ShortUrlGeneratorPort } from "./short.url.generator.port";
+
 export type ShortenerRequiredProperties = Readonly<
   Required<{
     createdAt: Date;
     originalUrl: string;
-    shortenedUrl: string;
+    hash: string;
+    host: string;
+    customerId: string;
+    ctxId: string;
   }>
 >;
 export class ShortenerAggregate extends AggregateRoot {
     createdAt: Date;
     originalUrl: string;
+    hash: string;
+    host: string;
+    customerId: string;
+    ctxId: string;
     shortenedUrl: string;
-
-    static generateShortenedUrl(): string {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        const length = 7;
-        let result = '';
-        
-        const randomValues = new Uint32Array(length);
-        crypto.getRandomValues(randomValues);
-        
-        for (let i = 0; i < length; i++) {
-            const randomIndex = randomValues[i] % characters.length;
-            result += characters.charAt(randomIndex);
-        }
-        
-        return result;
-    }
 
     constructor(shortenerProperties: ShortenerRequiredProperties) {
         super();
-
         this.originalUrl = shortenerProperties.originalUrl;
-        this.shortenedUrl = shortenerProperties.shortenedUrl;
+        this.hash = shortenerProperties.hash;
         this.createdAt = shortenerProperties.createdAt;
+        this.host = shortenerProperties.host;
+        this.customerId = shortenerProperties.customerId;
+        this.ctxId = shortenerProperties.ctxId;
+        this.shortenedUrl = this.generateShortenedUrl();
     }
 
-    regenerateShortenedUrl(): void {
-        this.shortenedUrl = ShortenerAggregate.generateShortenedUrl();
-        // Todo: Add Domain Event
+    private generateShortenedUrl(): string {
+        return `https://${this.host}/${this.hash}`;
+    }
+
+    regenerate(shortUrlGenerator: ShortUrlGeneratorPort): void {
+        this.hash = shortUrlGenerator.generate();
+        this.shortenedUrl = this.generateShortenedUrl();
+    }
+
+    view(): void {
+        this.apply(new LinkViewedEvent(
+            this.ctxId, 
+            this.customerId, 
+            this.originalUrl
+        ));
     }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Res } from "@nestjs/common";
+import { Controller, Get, Param, Res, Headers } from "@nestjs/common";
 
 import { Response } from "express";
 
@@ -10,8 +10,13 @@ import { FindShortenedUrlQuery } from "./../application/queries/find.shortened.u
 
 import { ShortenUrlCommand } from "./../application/commands/shorten.command";
 
+import { ViewShortLinkCommand } from "./../application/commands/view.link.command";
+
 interface ShortenUrlRequest {
     originalUrl: string;
+    ctxId: string;
+    customerId: string;
+    subDomain?: string;
 }
 
 interface ShortenUrlResponse {
@@ -28,12 +33,15 @@ export class ShortenerController {
     @Get(':shortId')
     async redirect(
         @Param('shortId') shortId: string,
+        @Headers('host') host: string,
         @Res() res: Response
     ) {
         try {
             const {
                 originalUrl
-            } = await this.queryBus.execute(new FindShortenedUrlQuery(shortId));
+            } = await this.queryBus.execute(new FindShortenedUrlQuery(host, shortId));
+
+            this.commandBus.execute(new ViewShortLinkCommand(host, shortId));
 
             return res.redirect(301, originalUrl);
         } catch (error) {
@@ -45,7 +53,12 @@ export class ShortenerController {
         try {
          
             const { shortenedUrl } = await this.commandBus.execute(
-                new ShortenUrlCommand(request.originalUrl)
+                new ShortenUrlCommand(
+                    request.originalUrl, 
+                    request.ctxId, 
+                    request.customerId, 
+                    request.subDomain
+                )
             );
       
             return { shortenedUrl };

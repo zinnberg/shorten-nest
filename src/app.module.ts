@@ -6,12 +6,23 @@ import {
 
 import { ShortenerModule } from './shortener/shortener.module';
 
-import { DatabaseModule } from './lib/db';
+import { DataStoreModule } from './lib/data-store';
+
+import { ConfigModule } from '@nestjs/config';
+
+import {resolve} from 'path'
+
+import { validateConfig } from './lib/config';
 
 @Module({
     imports: [
         ShortenerModule,
-        DatabaseModule,
+        DataStoreModule,
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: [resolve(__dirname, '..','.env')],
+            validate: validateConfig,
+        })
     ],
     controllers: [],
 })

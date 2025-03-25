@@ -8,6 +8,9 @@ service UrlShortenerService {
 
 message ShortenUrlRequest {
   string originalUrl = 1;
+  string ctxId = 2;
+  string customerId = 3;
+  string subDomain = 4;
 }
 
 message ShortenUrlResponse {

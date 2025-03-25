@@ -15,7 +15,7 @@ export class FindShortenedUrlQueryHandler implements IQueryHandler<FindShortened
     ) {}
     
     async execute(query: FindShortenedUrlQuery): Promise<FindShortenedUrlResult | null> {
-        const result = await this.shortenedUrlQueryImplement.list(query.shortenedUrl);
+        const result = await this.shortenedUrlQueryImplement.get(query.host, query.hash);
 
         if (result == null) {
             throw new NotFoundException('Shortened URL not found');

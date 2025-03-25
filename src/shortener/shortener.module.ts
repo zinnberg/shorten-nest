@@ -12,6 +12,14 @@ import { ShortenUrlCommandHandler } from "./application/commands/shorten.command
 
 import { ShortnerFactory } from "./domain/shortner.factory";
 
+import { SHORT_URL_GENERATION_INJECTION_TOKEN } from "./domain/short.url.generator.port";
+
+import { ShortUrlGeneratorNano } from "./infrastructure/ports/short.url.generater.nano";
+
+import { ShortUrlRepository } from "./infrastructure/repo/short-url.repo";
+
+import { SHORT_URL_REPO_INJECTION_TOKEN } from "./domain/short.url.repository.port";
+
 @Module({
     imports: [CqrsModule],
     controllers: [
@@ -22,6 +30,14 @@ import { ShortnerFactory } from "./domain/shortner.factory";
         ShortenedUrlQueryImplement,
         ShortenUrlCommandHandler,
         ShortnerFactory,
+        { 
+            provide: SHORT_URL_GENERATION_INJECTION_TOKEN, 
+            useClass: ShortUrlGeneratorNano,
+        },
+        {
+            provide: SHORT_URL_REPO_INJECTION_TOKEN,
+            useClass: ShortUrlRepository,
+        },
     ],
 })
 export class ShortenerModule {}
