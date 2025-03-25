@@ -3,6 +3,10 @@ import { RedisService } from "../../../lib/redis";
 import { CachePort } from "../../application/queries/cache-port";
 
 import { FindShortenedUrlResult } from "../../application/queries/find.shortened.url.result";
+
+import { Injectable } from "@nestjs/common";
+
+@Injectable()
 export class RedisCacheInteface implements CachePort {
     constructor(
         private readonly redisService: RedisService,
