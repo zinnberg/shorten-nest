@@ -22,7 +22,6 @@ export class RedisCacheInteface implements CachePort {
         return result ? JSON.parse(result) : null;
     }
     async set(host: string, domain: string, value: FindShortenedUrlResult, ttl?: number): Promise<void> {
-        const key = `${host}:${domain}`;
         await this.redisService.redisClient.set(
             this.generateKey(host, domain), 
             JSON.stringify(value), 
