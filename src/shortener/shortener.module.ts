@@ -20,6 +20,8 @@ import { ShortUrlRepository } from "./infrastructure/repo/short-url.repo";
 
 import { SHORT_URL_REPO_INJECTION_TOKEN } from "./domain/short.url.repository.port";
 
+import { ViewShortLinkCommandHandler } from "./application/commands/view.link.command.handler";
+
 @Module({
     imports: [CqrsModule],
     controllers: [
@@ -30,6 +32,7 @@ import { SHORT_URL_REPO_INJECTION_TOKEN } from "./domain/short.url.repository.po
         ShortenedUrlQueryImplement,
         ShortenUrlCommandHandler,
         ShortnerFactory,
+        ViewShortLinkCommandHandler,
         { 
             provide: SHORT_URL_GENERATION_INJECTION_TOKEN, 
             useClass: ShortUrlGeneratorNano,
