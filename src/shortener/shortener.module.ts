@@ -26,6 +26,7 @@ import { CACHE_PORT_INJECTION_TOKEN } from "./application/queries/cache-port";
 
 import { RedisCacheInteface } from "./infrastructure/query/cache.inteface.implement";
 
+import { LinkViewedEventHandler } from "./application/events/link.viewed.handler";
 @Module({
     imports: [CqrsModule],
     controllers: [
@@ -37,6 +38,7 @@ import { RedisCacheInteface } from "./infrastructure/query/cache.inteface.implem
         ShortenUrlCommandHandler,
         ShortnerFactory,
         ViewShortLinkCommandHandler,
+        LinkViewedEventHandler,
         { 
             provide: CACHE_PORT_INJECTION_TOKEN,
             useClass: RedisCacheInteface,
